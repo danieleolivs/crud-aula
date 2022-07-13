@@ -1,0 +1,69 @@
+body{
+    background:#dee2e2;
+    color:#414040;
+    font-family: 'Poppins', sans-serif;
+}
+
+.content{
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%)
+}
+
+.content input{
+    background:white;
+    border-radius:5px;
+    height:25px;
+    padding:5px;
+    box-shadow: 0 0 0 0;
+    border: 0 none;
+    outline: 0;
+    border: .5px solid #414040;
+}
+
+textarea:focus, input:focus, select:focus, button, span {
+    box-shadow: 0 0 0 0;
+    outline: 0;
+    color:#414040;
+    cursor:pointer;
+} 
+
+button, span, input{
+    font-family: 'Poppins', sans-serif;
+}
+
+button, input{
+    border: .5px solid #414040;
+}
+
+.content .criaPost{
+    height:36px;
+    border-radius:0 5px 5px 0;
+    margin-left:-10px;
+    background:#c3c2ff;
+}
+
+.criaPost:hover{
+    background:#b7b6f0
+}
+
+.content .btn-delete{
+    border-radius:50%;
+    width:25px;
+    height:25px;
+    background-color:#f4887c
+}
+
+.btn-delete:hover{
+    background-color:#da8379
+}
+
+.content .texto{
+    font-size:15px;
+    padding:10px
+}
+
+.content ul{
+    list-style: none;
+}

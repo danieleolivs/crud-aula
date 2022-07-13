@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="./crud.css">
+        <title>CRUD</title>
+    </head>
+    <body>
+        <div class='content'>
+            <form>
+                <input name='criaPost'  placeholder='Digite o seu post'/>
+                <button class='criaPost' type='submit'>Postar</button>
+            </form>
+            <ul class='listaDePosts'>
+            </ul>
+        </div>
+        
+    </body>
+</html>
+
+<script>
+
+    //"MODELO"
+    const miniRedeSocial = {
+        usuarios: [
+            {
+                username: 'danieleolivs'
+            }
+        ],
+        posts: [
+            {
+                id:Date.now(),
+                owner:'danieleolivs',
+                content:'Meu primeiro post'
+            }
+        ],
+        readPosts(){
+            miniRedeSocial.posts.forEach(({id, owner, content}) => {
+                miniRedeSocial.criaPost({id, owner:owner,content: content}, true);
+            });
+        },
+
+        criaPost(dados, htmlOnly = false){
+
+            const idInternoAqui = Date.now()
+
+            if(!htmlOnly){
+                //Cria post na memória (Array)
+                miniRedeSocial.posts.push({
+                    id:dados.id || idInternoAqui,
+                    owner: dados.owner,
+                    content: dados.content
+                });
+            }
+
+            //Cria post no HTML
+            const $listaDePosts = document.querySelector('.listaDePosts');
+
+            $listaDePosts.insertAdjacentHTML('afterbegin', `
+                <li data-id="${idInternoAqui}">
+                    <button class='btn-delete'>X</button>
+                    <span contenteditable class='texto'>${dados.content}</span>
+                    
+                </li>
+            `);
+            
+        },
+
+        apagaPost(id){
+            const listaAtualizada = miniRedeSocial.posts.filter((postAtual) => {
+                return postAtual.id !== Number(id);
+            })
+            miniRedeSocial.posts = listaAtualizada;
+        },
+
+        atualizaContentPost(id, novoConteudo){
+            const postAtualizado = miniRedeSocial.posts.find((post) => {
+                return post.id === Number(id);
+            })
+            postAtualizado.content = novoConteudo
+        }
+    };
+
+
+    //Código de Front End: Web
+
+    //$ indica que existe um elemento HTML dentro da variável
+    const $meuForm = document.querySelector('form');
+    console.log($meuForm)
+
+    //CRUD: [READ]
+    miniRedeSocial.readPosts();
+
+    //CRUD: [CREATE]
+    $meuForm.addEventListener('submit', function criaPostControla(infosDoEvento){
+
+        //impede o funcionamento padrão
+        infosDoEvento.preventDefault();
+        //console.log('Estamos criando um post novo');
+
+        const $campoCriaPost = document.querySelector('input[name="criaPost"]');
+    
+        miniRedeSocial.criaPost({owner:'danieleolivs',content: $campoCriaPost.value});
+
+        $campoCriaPost.value = '';
+
+    })
+
+    //CRUD: [DELETE]
+    document.querySelector('.listaDePosts').addEventListener('click', function(infosDoEvento){
+        const elementoAtual = infosDoEvento.target
+        const isBtnDeleteClick = elementoAtual.classList.contains('btn-delete')
+        
+        if(isBtnDeleteClick){
+            const id = elementoAtual.parentNode.getAttribute('data-id');
+            miniRedeSocial.apagaPost(id);
+            elementoAtual.parentNode.remove()
+        }
+    })
+
+    //CRUD: [UPDATE]
+    document.querySelector('.listaDePosts').addEventListener('input', function(infosDoEvento){
+        console.log('houve uma alteração')
+        const id = elementoAtual.parentNode.getAttribute('data-id');
+        const elementoAtual = infosDoEvento.target
+
+        miniRedeSocial.atualizaContentPost(id, elementoAtual.innerText)
+    })
+</script>
